@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
     namespace "org.woheller69.level"
     defaultConfig {
         applicationId "org.woheller69.level"
-        minSdk 16
+        minSdk 29
         targetSdk 35
         versionCode 30
         versionName "3.0"
@@ -35,6 +35,7 @@ android {
         exclude 'META-INF/*'
     }
     ndkVersion '28.0.13004108'
+    buildToolsVersion '35.0.1'
 }
 
 dependencies {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto"
     package="org.woheller69.level">
 
@@ -19,7 +20,8 @@
             android:name="org.woheller69.level.Level"
             android:hardwareAccelerated="true"
             android:screenOrientation="fullSensor"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,7 +31,8 @@
         <activity
             android:name=".SettingsActivity"
             android:screenOrientation="fullSensor"
-            android:parentActivityName=".Level" />
+            android:parentActivityName=".Level"
+            tools:ignore="DiscouragedApi" />
 
     </application>
 
