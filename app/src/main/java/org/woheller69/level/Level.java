@@ -150,12 +150,12 @@ public class Level extends AppCompatActivity implements OrientationListener {
                 int coarseprogress = sp.getInt("pref_rulercoarsecal",2000);
                 RelativeLayout rulerLayout = (RelativeLayout) findViewById(R.id.main_layout);
                 if (rulerCalView == null){
-                    Toast.makeText(this,getString(R.string.calibrate)+" \u25b2\u25bc", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,getString(R.string.calibrate)+" ▲▼", Toast.LENGTH_LONG).show();
                     rulerCalView = new VerticalSeekBar(this);
                     rulerCalView.setMax(200);
                     rulerCalView.setProgress(progress);
                     rulerCalView.setThumb(ContextCompat.getDrawable(context, R.drawable.ic_fine));
-                    rulerCalView.getThumb().setColorFilter(getThemeColor(context,R.attr.colorAccent), PorterDuff.Mode.MULTIPLY);
+                    rulerCalView.getThumb().setColorFilter(getThemeColor(context, androidx.appcompat.R.attr.colorAccent), PorterDuff.Mode.MULTIPLY);
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     layoutParams.setMargins(rulerLayout.getWidth()*3/8,0,0,0);
                     rulerCalView.setLayoutParams(layoutParams);
@@ -163,7 +163,7 @@ public class Level extends AppCompatActivity implements OrientationListener {
                     rulerCoarseCalView.setMax(6000);
                     rulerCoarseCalView.setProgress(coarseprogress);
                     rulerCoarseCalView.setThumb(ContextCompat.getDrawable(context, R.drawable.ic_coarse));
-                    rulerCoarseCalView.getThumb().setColorFilter(getThemeColor(context,R.attr.colorAccent), PorterDuff.Mode.MULTIPLY);
+                    rulerCoarseCalView.getThumb().setColorFilter(getThemeColor(context, androidx.appcompat.R.attr.colorAccent), PorterDuff.Mode.MULTIPLY);
                     RelativeLayout.LayoutParams layoutParams2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     layoutParams2.setMargins(0,0,rulerLayout.getWidth()*3/8,0);
                     layoutParams2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
