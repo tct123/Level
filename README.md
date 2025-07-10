@@ -4,7 +4,7 @@ woheller69@t-online.de
 
 
 Or via this link (with fees)
-<a href="https://www.paypal.com/donate?hosted_button_id=XVXQ54LBLZ4AA"><img  align="left" src="https://img.shields.io/badge/Donate%20with%20Debit%20or%20Credit%20Card-002991?style=plastic"></a></pre>
+<a href="https://www.paypal.com/donate?hosted_button_id=XVXQ54LBLZ4AA"><img  align="left" src="https://img.shields.io/badge/Donate%20with%20Debit%20or%20Credit%20Card-002991?style=plastic" alt=""></a></pre>
 
 
 |                                                                                                    **RadarWeather**                                                                                                    |                                                                                     **Gas Prices**                                                                                     |                                                                                      **Smart Eggtimer**                                                                                       |
@@ -25,7 +25,7 @@ Or via this link (with fees)
 
 # Bubble: Spirit level and ruler
 
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Bubble1.png" height="250"/> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Bubble2.png" height="250"/> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Bubble3.png" height="250"/>
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Bubble1.png" height="1230" alt=""/> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Bubble2.png" height="1230" alt=""/> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Bubble3.png" height="1230" alt=""/>
 
 With Bubble you can measure angles and inclination.
 
