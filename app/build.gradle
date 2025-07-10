@@ -26,14 +26,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    lintOptions {
+    packagingOptions {
+        jniLibs {
+            excludes += ['META-INF/*']
+        }
+        resources {
+            excludes += ['META-INF/*']
+        }
+    }
+    lint {
         disable 'GoogleAppIndexingWarning'
     }
 
-    packagingOptions {
-        exclude 'META-INF/*'
-    }
+
 }
 
 dependencies {
