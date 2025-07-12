@@ -10,6 +10,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import androidx.annotation.NonNull;
+
 import org.woheller69.level.orientation.Orientation;
 import org.woheller69.level.painter.LevelPainter;
 
@@ -50,19 +52,19 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback, On
         }
     }
 
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
         if (painter != null) {
             painter.setSurfaceSize(width, height);
         }
     }
 
-    public void surfaceCreated(SurfaceHolder holder) {
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {
         if (painter == null) {
             painter = new LevelPainter(holder, getContext(), new Handler(Looper.getMainLooper()));
         }
     }
 
-    public void surfaceDestroyed(SurfaceHolder holder) {
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         if (painter != null) {
             painter.pause(true);
             painter.clean();

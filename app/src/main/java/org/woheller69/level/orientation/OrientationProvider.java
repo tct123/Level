@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /*
  *  This file is part of Level (an Android Bubble Level).
@@ -65,7 +66,6 @@ public class OrientationProvider implements SensorEventListener {
     private float pitch;
     private float roll;
     private final int displayOrientation;
-    private Sensor sensor;
     private SensorManager sensorManager;
     private OrientationListener listener;
     /**
@@ -78,10 +78,6 @@ public class OrientationProvider implements SensorEventListener {
     private boolean running = false;
     private boolean calibrating = false;
     private float balance;
-    private float tmp;
-    private float oldPitch;
-    private float oldRoll;
-    private float oldBalance;
     private float minStep = 360;
     private float refValues = 0;
     private Orientation orientation;
@@ -91,7 +87,7 @@ public class OrientationProvider implements SensorEventListener {
     public OrientationProvider(Context context) {
         activity = (AppCompatActivity) context;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            this.displayOrientation = activity.getDisplay().getRotation();
+            this.displayOrientation = Objects.requireNonNull(activity.getDisplay()).getRotation();
         } else {
             this.displayOrientation = activity.getWindowManager().getDefaultDisplay().getRotation();
         }
@@ -120,7 +116,7 @@ public class OrientationProvider implements SensorEventListener {
             if (sensorManager != null) {
                 sensorManager.unregisterListener(this);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -140,13 +136,13 @@ public class OrientationProvider implements SensorEventListener {
                 boolean supported = true;
                 for (int sensorType : getRequiredSensors()) {
                     List<Sensor> sensors = sensorManager.getSensorList(sensorType);
-                    supported = (sensors.size() > 0) && supported;
+                    supported = (!sensors.isEmpty()) && supported;
                 }
                 this.supported = supported;
                 return supported;
             }
         }
-        return supported;
+        return Boolean.TRUE.equals(supported);
     }
 
 
@@ -163,19 +159,19 @@ public class OrientationProvider implements SensorEventListener {
         SharedPreferences prefs = activity.getPreferences(Context.MODE_PRIVATE);
         for (Orientation orientation : Orientation.values()) {
             calibratedPitch[orientation.ordinal()] =
-                    prefs.getFloat(SAVED_PITCH + orientation.toString(), 0);
+                    prefs.getFloat(SAVED_PITCH + orientation, 0);
             calibratedRoll[orientation.ordinal()] =
-                    prefs.getFloat(SAVED_ROLL + orientation.toString(), 0);
+                    prefs.getFloat(SAVED_ROLL + orientation, 0);
             calibratedBalance[orientation.ordinal()] =
-                    prefs.getFloat(SAVED_BALANCE + orientation.toString(), 0);
+                    prefs.getFloat(SAVED_BALANCE + orientation, 0);
         }
         // register listener and start listening
         sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         running = true;
         for (int sensorType : getRequiredSensors()) {
             List<Sensor> sensors = sensorManager.getSensorList(sensorType);
-            if (sensors.size() > 0) {
-                sensor = sensors.get(0);
+            if (!sensors.isEmpty()) {
+                Sensor sensor = sensors.get(0);
                 running = sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL) && running;
             }
         }
@@ -189,9 +185,9 @@ public class OrientationProvider implements SensorEventListener {
 
     public void onSensorChanged(SensorEvent event) {
 
-        oldPitch = pitch;
-        oldRoll = roll;
-        oldBalance = balance;
+        float oldPitch = pitch;
+        float oldRoll = roll;
+        float oldBalance = balance;
 
         SensorManager.getRotationMatrix(R, I, event.values, MAG);
 
@@ -231,7 +227,7 @@ public class OrientationProvider implements SensorEventListener {
         SensorManager.getOrientation(outR, LOC);
 
         // normalize z on ux, uy
-        tmp = (float) Math.sqrt(outR[8] * outR[8] + outR[9] * outR[9]);
+        float tmp = (float) Math.sqrt(outR[8] * outR[8] + outR[9] * outR[9]);
         tmp = (tmp == 0 ? 0 : outR[8] / tmp);
 
         // LOC[0] compass
@@ -309,7 +305,7 @@ public class OrientationProvider implements SensorEventListener {
         try {
             success = activity.getPreferences(
                     Context.MODE_PRIVATE).edit().clear().commit();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         if (success) {
             Arrays.fill(calibratedPitch, 0);

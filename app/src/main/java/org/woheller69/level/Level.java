@@ -162,9 +162,9 @@ public class Level extends AppCompatActivity implements OrientationListener {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
                 int progress = sp.getInt("pref_rulercal",100);
                 int coarseprogress = sp.getInt("pref_rulercoarsecal",2000);
-                RelativeLayout rulerLayout = (RelativeLayout) findViewById(R.id.main_layout);
+                RelativeLayout rulerLayout = findViewById(R.id.main_layout);
                 if (rulerCalView == null){
-                    Toast.makeText(this,getString(R.string.calibrate)+" \u25b2\u25bc", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,getString(R.string.calibrate)+" ▲▼", Toast.LENGTH_LONG).show();
                     rulerCalView = new VerticalSeekBar(this);
                     rulerCalView.setMax(200);
                     rulerCalView.setProgress(progress);
@@ -250,7 +250,7 @@ public class Level extends AppCompatActivity implements OrientationListener {
     private void showRuler(boolean ruler) {
         if (ruler){
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-            RelativeLayout rulerLayout = (RelativeLayout) findViewById(R.id.main_layout);
+            RelativeLayout rulerLayout = findViewById(R.id.main_layout);
             int progress = sp.getInt("pref_rulercal",100);
             int coarseProgress = sp.getInt("pref_rulercoarsecal",2000);
             float dpmm =  getDpmmCal(progress,coarseProgress);
@@ -262,7 +262,7 @@ public class Level extends AppCompatActivity implements OrientationListener {
             invalidateOptionsMenu();
         } else {
             levelView.setVisibility(View.VISIBLE);
-            RelativeLayout rulerLayout = (RelativeLayout) findViewById(R.id.main_layout);
+            RelativeLayout rulerLayout = findViewById(R.id.main_layout);
             if (rulerView!=null) rulerLayout.removeView(rulerView);
             rulerView = null;
             if (rulerCalView !=null) rulerLayout.removeView(rulerCalView);

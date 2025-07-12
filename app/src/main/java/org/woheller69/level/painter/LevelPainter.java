@@ -70,11 +70,6 @@ public class LevelPainter implements Runnable {
      */
     private boolean initialized;
     private boolean wait;
-    /**
-     * Dimensions
-     */
-    private int height;
-    private int width;
     private int canvasWidth;
     private int canvasHeight;
     private int minLevelX;
@@ -85,8 +80,6 @@ public class LevelPainter implements Runnable {
     private int levelMinusBubbleHeight;
     private int middleX;
     private int middleY;
-    private int bubbleWidth;
-    private int bubbleHeight;
     private int halfBubbleWidth;
     private int halfBubbleHeight;
     private int halfMarkerGap;
@@ -94,27 +87,24 @@ public class LevelPainter implements Runnable {
     private int maxLevelY;
     private int minBubble;
     private int maxBubble;
-    private int markerThickness;
-    private int levelBorderWidth;
-    private int levelBorderHeight;
-    private int infoHeight;
-    private int lcdWidth;
-    private int lcdHeight;
-    private int lockWidth;
-    private int lockHeight;
-    private int displayPadding;
-    private int displayGap;
-    private int infoY;
-    private int sensorY;
-    private int sensorGap;
-    private int arrowWidth;
-    private int arrowPadding;
+    private final int markerThickness;
+    private final int levelBorderWidth;
+    private final int levelBorderHeight;
+    private final int infoHeight;
+    private final int lcdWidth;
+    private final int lcdHeight;
+    private final int lockWidth;
+    private final int lockHeight;
+    private final int displayPadding;
+    private final int displayGap;
+    private final int sensorGap;
+    private final int arrowWidth;
     private int levelMaxDimension;
     /**
      * Rect
      */
-    private Rect displayRect;
-    private Rect lockRect;
+    private final Rect displayRect;
+    private final Rect lockRect;
 
     /**
      * Angles
@@ -131,18 +121,10 @@ public class LevelPainter implements Runnable {
      * Orientation
      */
     private Orientation orientation;
-    /**
-     * Bubble physics
-     */
-    private long currentTime;
     private long lastTime;
-    private double timeDiff;
-    private double posX;
-    private double posY;
     private double angleX;
     private double angleY;
     private double speedX;
-    private double speedY;
     private double x, y;
     /**
      * Drawables
@@ -154,11 +136,7 @@ public class LevelPainter implements Runnable {
     private Drawable bubble2D;
     private Drawable marker2D;
     private Drawable display;
-    /**
-     * Info
-     */
-    private String infoText;
-    private String lockText;
+    private final String lockText;
     /**
      * Ajustement de la vitesse
      */
@@ -166,22 +144,21 @@ public class LevelPainter implements Runnable {
     /**
      * Format des angles
      */
-    private DecimalFormat displayFormat;
-    private String displayBackgroundText;
-    private Paint lcdForegroundPaint;
-    private Paint lcdBackgroundPaint;
-    private Paint lockForegroundPaint;
-    private Paint lockBackgroundPaint;
-    private Paint infoPaint;
-    private Paint blackPaint;
-    private int backgroundColor;
+    private final DecimalFormat displayFormat;
+    private final String displayBackgroundText;
+    private final Paint lcdForegroundPaint;
+    private final Paint lcdBackgroundPaint;
+    private final Paint lockForegroundPaint;
+    private final Paint lockBackgroundPaint;
+    private final Paint infoPaint;
+    private final int backgroundColor;
     /**
      * Config angles
      */
-    private boolean showAngle;
-    private boolean lockEnabled;
+    private final boolean showAngle;
+    private final boolean lockEnabled;
     private boolean locked;
-    private long frameRate;
+    private final long frameRate;
 
     public LevelPainter(SurfaceHolder surfaceHolder, Context context, Handler handler) {
 
@@ -210,7 +187,7 @@ public class LevelPainter implements Runnable {
         this.backgroundColor = ContextCompat.getColor(context, R.color.silver);
 
         // strings
-        this.infoText = context.getString(R.string.calibrate_info);
+        String infoText = context.getString(R.string.calibrate_info);
         this.lockText = context.getString(R.string.lock_info);
 
         // typeface
@@ -252,12 +229,12 @@ public class LevelPainter implements Runnable {
         this.lockBackgroundPaint.setTypeface(lcd);
         this.lockBackgroundPaint.setTextAlign(Paint.Align.CENTER);
 
-        this.blackPaint = new Paint();
-        this.blackPaint.setColor(ContextCompat.getColor(context, R.color.black));
-        this.blackPaint.setAntiAlias(true);
-        this.blackPaint.setTextSize(context.getResources().getDimensionPixelSize(R.dimen.lcd_text));
-        this.blackPaint.setTypeface(lcd);
-        this.blackPaint.setTextAlign(Paint.Align.CENTER);
+        Paint blackPaint = new Paint();
+        blackPaint.setColor(ContextCompat.getColor(context, R.color.black));
+        blackPaint.setAntiAlias(true);
+        blackPaint.setTextSize(context.getResources().getDimensionPixelSize(R.dimen.lcd_text));
+        blackPaint.setTypeface(lcd);
+        blackPaint.setTextAlign(Paint.Align.CENTER);
 
         // dimens
         Rect rect = new Rect();
@@ -266,8 +243,8 @@ public class LevelPainter implements Runnable {
         this.lcdBackgroundPaint.getTextBounds(displayBackgroundText, 0, displayBackgroundText.length(), rect);
         this.lcdHeight = rect.height();
         this.lcdWidth = rect.width();
-        this.lcdBackgroundPaint.getTextBounds("\u25b6",0, 1, rect);
-        this.arrowPadding = context.getResources().getDimensionPixelSize(R.dimen.arrow_padding);
+        this.lcdBackgroundPaint.getTextBounds("▶",0, 1, rect);
+        int arrowPadding = context.getResources().getDimensionPixelSize(R.dimen.arrow_padding);
         this.arrowWidth = rect.width() + arrowPadding;
         this.lockBackgroundPaint.getTextBounds(LOCKED, 0, LOCKED.length(), rect);
         this.lockHeight = rect.height();
@@ -359,10 +336,10 @@ public class LevelPainter implements Runnable {
     }
 
     private void updatePhysics() {
-        currentTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
         if (lastTime > 0) {
-            timeDiff = (currentTime - lastTime) / 1000.0;
-            posX = orientation.getReverse() * (2 * x - minLevelX - maxLevelX) / levelMinusBubbleWidth;
+            double timeDiff = (currentTime - lastTime) / 1000.0;
+            double posX = orientation.getReverse() * (2 * x - minLevelX - maxLevelX) / levelMinusBubbleWidth;
             switch (orientation) {
                 case TOP:
                 case BOTTOM:
@@ -373,9 +350,9 @@ public class LevelPainter implements Runnable {
                     speedX = orientation.getReverse() * (2 * angleY - posX) * viscosityValue;
                     break;
                 case LANDING:
-                    posY = (2 * y - minLevelY - maxLevelY) / levelMinusBubbleHeight;
+                    double posY = (2 * y - minLevelY - maxLevelY) / levelMinusBubbleHeight;
                     speedX = (2 * angleX - posX) * viscosityValue;
-                    speedY = (2 * angleY - posY) * viscosityValue;
+                    double speedY = (2 * angleY - posY) * viscosityValue;
                     y += speedY * timeDiff;
                     break;
             }
@@ -458,13 +435,13 @@ public class LevelPainter implements Runnable {
                         lcdForegroundPaint);
                 if (angle2raw > 0.1f){
                     canvas.drawText(  //left-right →
-                            "\u25b6",
+                            "▶",
                             middleX - (displayRect.width() + displayGap) + arrowWidth / 2.0f + displayPadding / 2.0f,
                             displayRect.centerY() + lcdHeight / 2.0f,
                             lcdForegroundPaint);
                 } else if (angle2raw <-0.1f){
                     canvas.drawText(  //left-right ←
-                            "\u25c0",
+                            "◀",
                             middleX - (displayRect.width() + displayGap) + arrowWidth / 2.0f + displayPadding / 2.0f,
                             displayRect.centerY() + lcdHeight / 2.0f,
                             lcdForegroundPaint);
@@ -481,13 +458,13 @@ public class LevelPainter implements Runnable {
                         lcdForegroundPaint);
                 if (angle1raw > 0.1f){
                     canvas.drawText(  //up-down ↓
-                            "\u25bc",
+                            "▼",
                             middleX + displayGap + (displayRect.width() - arrowWidth) / 2.0f + displayRect.width() / 2.0f - displayPadding / 2.0f,
                             displayRect.centerY() + lcdHeight / 2.0f,
                             lcdForegroundPaint);
                 } else if (angle1raw < -0.1f){
                     canvas.drawText(  //up-down ↑
-                            "\u25b2",
+                            "▲",
                             middleX + displayGap + (displayRect.width() - arrowWidth) / 2.0f + displayRect.width() / 2.0f - displayPadding / 2.0f,
                             displayRect.centerY() + lcdHeight / 2.0f,
                             lcdForegroundPaint);
@@ -546,13 +523,13 @@ public class LevelPainter implements Runnable {
                 if (angle1raw > 0.1f) {
                     if (orientation.getReverse()==1){
                         canvas.drawText(
-                                "\u25bc",
+                                "▼",
                                 middleX - arrowWidth / 2.0f + displayRect.width() / 2.0f - displayPadding / 2.0f,
                                 displayRect.centerY() + lcdHeight / 2.0f,
                                 lcdForegroundPaint);
                     } else {
                         canvas.drawText(
-                                "\u25b2",
+                                "▲",
                                 middleX - arrowWidth / 2.0f + displayRect.width() / 2.0f - displayPadding / 2.0f,
                                 displayRect.centerY() + lcdHeight / 2.0f,
                                 lcdForegroundPaint);
@@ -561,13 +538,13 @@ public class LevelPainter implements Runnable {
                     if (orientation.getReverse()==1)
                     {
                         canvas.drawText(
-                                "\u25b2",
+                                "▲",
                                 middleX - arrowWidth / 2.0f + displayRect.width() / 2.0f - displayPadding / 2.0f,
                                 displayRect.centerY() + lcdHeight / 2.0f,
                                 lcdForegroundPaint);
                     } else {
                         canvas.drawText(
-                                "\u25bc",
+                                "▼",
                                 middleX - arrowWidth / 2.0f + displayRect.width() / 2.0f - displayPadding / 2.0f,
                                 displayRect.centerY() + lcdHeight / 2.0f,
                                 lcdForegroundPaint);
@@ -611,6 +588,9 @@ public class LevelPainter implements Runnable {
             synchronized (this.surfaceHolder) {
                 orientation = newOrientation;
 
+                int height;
+                int width;
+                int infoY;
                 switch (newOrientation) {
                     case LEFT:        // left
                     case RIGHT:    // right
@@ -627,7 +607,7 @@ public class LevelPainter implements Runnable {
                         break;
                 }
 
-                sensorY = infoY - infoHeight - sensorGap;
+                int sensorY = infoY - infoHeight - sensorGap;
 
                 middleX = canvasWidth / 2;
                 middleY = canvasHeight / 2;
@@ -642,7 +622,7 @@ public class LevelPainter implements Runnable {
                     case BOTTOM:    // bottom
                     case LEFT:        // left
                     case RIGHT:    // right
-                        levelWidth = (int) (width - 2 * displayGap);
+                        levelWidth = width - 2 * displayGap;
                         levelHeight = (int) (levelWidth * LEVEL_ASPECT_RATIO);
                         break;
                 }
@@ -657,8 +637,8 @@ public class LevelPainter implements Runnable {
                 // bubble
                 halfBubbleWidth = (int) (levelWidth * BUBBLE_WIDTH / 2);
                 halfBubbleHeight = (int) (halfBubbleWidth * BUBBLE_ASPECT_RATIO);
-                bubbleWidth = 2 * halfBubbleWidth;
-                bubbleHeight = 2 * halfBubbleHeight;
+                int bubbleWidth = 2 * halfBubbleWidth;
+                int bubbleHeight = 2 * halfBubbleHeight;
                 maxBubble = (int) (maxLevelY - bubbleHeight * BUBBLE_CROPPING);
                 minBubble = maxBubble - bubbleHeight;
 

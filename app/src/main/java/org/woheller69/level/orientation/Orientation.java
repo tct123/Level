@@ -27,10 +27,10 @@ public enum Orientation {
     BOTTOM(-1, 180),
     LEFT(-1, -90);
 
-    private int reverse;
-    private int rotation;
+    private final int reverse;
+    private final int rotation;
 
-    private Orientation(int reverse, int rotation) {
+    Orientation(int reverse, int rotation) {
         this.reverse = reverse;
         this.rotation = rotation;
     }
@@ -48,6 +48,8 @@ public enum Orientation {
             //minimum sensibility for playing sound (play sound even if sensor sensibility is better)
             sensibility = 0.2f;
         }
+        boolean b = Math.abs(pitch) <= sensibility
+                || Math.abs(pitch) >= 180 - sensibility;
         switch (this) {
             case BOTTOM:
             case TOP:
@@ -56,12 +58,10 @@ public enum Orientation {
             case LANDING:
                 return roll <= sensibility
                         && roll >= -sensibility
-                        && (Math.abs(pitch) <= sensibility
-                        || Math.abs(pitch) >= 180 - sensibility);
+                        && b;
             case LEFT:
             case RIGHT:
-                return Math.abs(pitch) <= sensibility
-                        || Math.abs(pitch) >= 180 - sensibility;
+                return b;
         }
         return false;
     }

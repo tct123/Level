@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import org.woheller69.level.R;
 
@@ -35,7 +36,7 @@ public class RulerView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         heightPx = this.getHeight();
@@ -82,8 +83,8 @@ public class RulerView extends View {
                         (float)(widthPx), (float)(heightPx-dpfi*(i)), paint);
                 //draw a number every inch
                 path.reset();
-                path.moveTo((float)(widthPx-dpmm*(8)-textSize/5), (float)(heightPx- dpfi *(i)-textSize*0.25));
-                path.lineTo((float)(widthPx-dpmm*(8)-textSize/5), (float)(heightPx- dpfi *(i)-textSize));
+                path.moveTo((float)(widthPx-dpmm*(8)- (double) textSize /5), (float)(heightPx- dpfi *(i)-textSize*0.25));
+                path.lineTo((float)(widthPx-dpmm*(8)- (double) textSize /5), (float)(heightPx- dpfi *(i)-textSize));
                 canvas.drawTextOnPath(""+i/32, path, 0, 0, paint);
             } else if (i%16 == 0) {
                 //draw 6mm line every 1/2 inch
